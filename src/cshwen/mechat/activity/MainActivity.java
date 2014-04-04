@@ -8,14 +8,10 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.Menu;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
 
 public class MainActivity extends Activity {
 
 	Handler handler=new Handler(){
-		@Override
 		public void handleMessage(Message msg){
 			switch (msg.what) {
 			case Constants.LOGINING:
@@ -38,16 +34,8 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		
-		final ImManager im=new ImManager(handler);
-		im.loginUser("user", "user");
-		
-		Button b=(Button)findViewById(R.id.button1);
-		b.setOnClickListener(new  OnClickListener() {
-			@Override
-			public void onClick(View arg0) {
-				im.exit();
-			}
-		});
+		ImManager im=new ImManager(handler);
+		im.loginUser("admin", "csw");
 	}
 
 	@Override
