@@ -10,11 +10,6 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".MainActivity" >
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/hello_world" />
-
     <Button
         android:id="@+id/button1"
         android:layout_width="wrap_content"
@@ -22,15 +17,50 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
         android:text="Button" />
-    
-<com.beardedhen.androidbootstrap.BootstrapEditText
-            android:id="@+id/txtOne"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:hint="rounded" 
-            bootstrapbutton:be_roundedCorners="true"
-            android:gravity="center"
-            bootstrapbutton:be_state="success"
-/>
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/button1"
+        android:layout_centerHorizontal="true"
+        android:text="@string/hello_world" />
+
+    <com.beardedhen.androidbootstrap.BootstrapEditText
+        android:id="@+id/login_username"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_margin="5dp"
+        android:ems="10"
+        android:hint="@string/login_hint_username"
+        fontawesometext:be_roundedCorners="true" >
+
+        <requestFocus />
+    </com.beardedhen.androidbootstrap.BootstrapEditText>
+
+    <com.beardedhen.androidbootstrap.BootstrapEditText
+        android:id="@+id/login_password"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/login_username"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="5dp"
+        android:ems="10"
+        android:hint="@string/login_hint_password"
+        fontawesometext:be_roundedCorners="true" />
+
+    <com.beardedhen.androidbootstrap.BootstrapButton
+        android:id="@+id/login_login"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/login_password"
+        android:layout_centerHorizontal="true"
+        android:text="@string/login_login"
+        bootstrapbutton:bb_roundedCorners="true"
+                bootstrapbutton:bb_size="small"
+        bootstrapbutton:bb_type="info" >
+    </com.beardedhen.androidbootstrap.BootstrapButton>
+
 </RelativeLayout>

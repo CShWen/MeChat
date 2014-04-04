@@ -41,7 +41,7 @@ public class MainActivity extends Activity {
 		final ImManager im=new ImManager(handler);
 		im.loginUser("user", "user");
 		
-		Button b=(Button)findViewById(R.id.button1);
+		Button b=(Button)findViewById(R.id.login_login);
 		b.setOnClickListener(new  OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
