@@ -1,22 +1,25 @@
 package cshwen.mechat.activity;
 
+import com.beardedhen.androidbootstrap.BootstrapEditText;
+
 import cshwen.mechat.im.ImManager;
 import cshwen.mechat.utils.Constants;
-
+import cshwen.mechat.utils.Tool;
+import cshwen.mechat.utils.XmlUtil;
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.Menu;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
 
 public class MainActivity extends Activity {
-
-	Handler handler=new Handler(){
+	ImManager im;
+	XmlUtil uxml;
+	Handler handler = new Handler() {
 		@Override
-		public void handleMessage(Message msg){
+		public void handleMessage(Message msg) {
 			switch (msg.what) {
 			case Constants.LOGINING:
 				System.out.println("CShWen登录中");
@@ -33,21 +36,15 @@ public class MainActivity extends Activity {
 			}
 		}
 	};
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		
-		final ImManager im=new ImManager(handler);
-		im.loginUser("user", "user");
-		
-		Button b=(Button)findViewById(R.id.login_login);
-		b.setOnClickListener(new  OnClickListener() {
-			@Override
-			public void onClick(View arg0) {
-				im.exit();
-			}
-		});
+
+		im = new ImManager(handler);
+		uxml = new XmlUtil(getApplicationContext());
+
 	}
 
 	@Override
@@ -55,6 +52,27 @@ public class MainActivity extends Activity {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
+	}
+
+	public void loginClick(View v) {
+		BootstrapEditText et_username = (BootstrapEditText) findViewById(R.id.login_username);
+		BootstrapEditText et_pwd = (BootstrapEditText) findViewById(R.id.login_password);
+		String username = et_username.getText().toString().trim();
+		String pwd = et_pwd.getText().toString().trim();
+		if (!Tool.isUserStandard(username))
+			et_username.setError("请输入正确的帐号");
+		else if (!Tool.isPwdStandard(pwd))
+			et_pwd.setError("请输入正确的密码");
+		else {
+			im.loginUser(username, pwd);
+			uxml.saveUserInfo(username, pwd);
+		}
+	}
+
+	public void registerClick(View v) {
+		im.exit();
+		Intent intent = new Intent(this, RegisterActivity.class);
+		startActivity(intent);
 	}
 
 }

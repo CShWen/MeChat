@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:bootstrapbutton="http://schemas.android.com/apk/res-auto"
+    xmlns:fontawesometext="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin" >
+
+    <com.beardedhen.androidbootstrap.BootstrapEditText
+        android:id="@+id/register_username"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/register_pwd"
+        android:layout_alignParentRight="true"
+        android:layout_margin="5dp"
+        android:hint="@string/register_hint_username"
+        android:singleLine="true"
+        fontawesometext:be_roundedCorners="true" />
+
+    <com.beardedhen.androidbootstrap.BootstrapEditText
+        android:id="@+id/register_pwd"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/register_2pwd"
+        android:layout_margin="5dp"
+        android:layout_marginTop="50dp"
+        android:ems="10"
+        android:hint="@string/register_hint_pwd"
+        android:inputType="textPassword"
+        android:singleLine="true"
+        fontawesometext:be_roundedCorners="true" >
+
+        <requestFocus />
+    </com.beardedhen.androidbootstrap.BootstrapEditText>
+
+    <com.beardedhen.androidbootstrap.BootstrapButton
+        android:id="@+id/register_register"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/register_username"
+        android:layout_alignRight="@+id/register_username"
+        android:layout_centerVertical="true"
+        android:layout_margin="5dp"
+        android:onClick="registerClick"
+        android:text="@string/register_register"
+        fontawesometext:bb_roundedCorners="true"
+        fontawesometext:bb_size="small"
+        fontawesometext:bb_type="info" >
+    </com.beardedhen.androidbootstrap.BootstrapButton>
+
+    <com.beardedhen.androidbootstrap.BootstrapEditText
+        android:id="@+id/register_2pwd"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/register_register"
+        android:layout_margin="5dp"
+        android:ems="10"
+        android:hint="@string/register_hint_2pwd"
+        android:inputType="textPassword"
+        android:singleLine="true"
+        fontawesometext:be_roundedCorners="true" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/register_username"
+        android:layout_alignLeft="@+id/register_username" >
+
+        <com.beardedhen.androidbootstrap.FontAwesomeText
+            android:id="@+id/register_rule"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/bbutton_info"
+            android:textSize="32sp"
+            fontawesometext:fa_icon="fa-comment-o" >
+        </com.beardedhen.androidbootstrap.FontAwesomeText>
+
+        <TextView
+            android:id="@+id/register_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="3dp"
+            android:text="@string/register_rule" />
+    </LinearLayout>
+
+</RelativeLayout>

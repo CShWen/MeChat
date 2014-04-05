@@ -7,7 +7,13 @@
 
     <string name="login_hint_username">帐号：</string>
     <string name="login_hint_password">密码：</string>
-    <string name="login_login">登录</string>
-    <string name="login_register">注册</string>
+    <string name="login_login">登 录</string>
+    <string name="login_register">注 册</string>
+    
+    <string name="register_hint_username">请输入您要注册的帐号名：</string>
+    <string name="register_hint_pwd">请输入您的密码：</string>
+    <string name="register_hint_2pwd">请再次输入您的密码：</string>
+    <string name="register_register">立即注册</string>
+    <string name="register_rule">请注意：用户名长度为3–20个字符，密码长度为3–20个字符，均不为空。</string>
     
 </resources>
