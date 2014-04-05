@@ -293,17 +293,18 @@ containing a value of this type.
         public static final int txtText=0x7f09000f;
     }
     public static final class layout {
-        public static final int activity_main=0x7f030000;
-        public static final int activity_register=0x7f030001;
-        public static final int bootstrap_button=0x7f030002;
-        public static final int bootstrap_button_fill=0x7f030003;
-        public static final int bootstrap_edit_text=0x7f030004;
-        public static final int bootstrap_thumbnail=0x7f030005;
-        public static final int bootstrap_thumbnail_circle=0x7f030006;
-        public static final int font_awesome_text=0x7f030007;
-        public static final int row_title=0x7f030008;
-        public static final int row_title_and_subtitle=0x7f030009;
-        public static final int row_two_columns=0x7f03000a;
+        public static final int activity_home=0x7f030000;
+        public static final int activity_main=0x7f030001;
+        public static final int activity_register=0x7f030002;
+        public static final int bootstrap_button=0x7f030003;
+        public static final int bootstrap_button_fill=0x7f030004;
+        public static final int bootstrap_edit_text=0x7f030005;
+        public static final int bootstrap_thumbnail=0x7f030006;
+        public static final int bootstrap_thumbnail_circle=0x7f030007;
+        public static final int font_awesome_text=0x7f030008;
+        public static final int row_title=0x7f030009;
+        public static final int row_title_and_subtitle=0x7f03000a;
+        public static final int row_two_columns=0x7f03000b;
     }
     public static final class menu {
         public static final int main=0x7f080000;

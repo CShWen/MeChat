@@ -24,8 +24,8 @@
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:layout_margin="5dp"
-        android:ems="10"
         android:hint="@string/login_hint_username"
+        android:singleLine="true"
         fontawesometext:be_roundedCorners="true" >
 
         <requestFocus />
@@ -38,8 +38,9 @@
         android:layout_below="@+id/login_username"
         android:layout_centerHorizontal="true"
         android:layout_margin="5dp"
-        android:ems="10"
         android:hint="@string/login_hint_password"
+        android:inputType="textPassword"
+        android:singleLine="true"
         fontawesometext:be_roundedCorners="true" />
 
     <com.beardedhen.androidbootstrap.BootstrapButton

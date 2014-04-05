@@ -3,6 +3,8 @@
  */
 package cshwen.mechat.activity;
 
+import org.jivesoftware.smack.packet.XMPPError;
+
 import com.beardedhen.androidbootstrap.BootstrapEditText;
 import com.beardedhen.androidbootstrap.FontAwesomeText;
 
@@ -10,6 +12,8 @@ import cshwen.mechat.im.ImManager;
 import cshwen.mechat.utils.Constants;
 import cshwen.mechat.utils.Tool;
 import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -21,21 +25,38 @@ import android.widget.Toast;
  * 
  */
 public class RegisterActivity extends Activity {
+	ProgressDialog progress;
 	ImManager im;
 	Handler handler = new Handler() {
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
-			case Constants.LOGINING:
-				System.out.println("CShWen登录中");
+			case Constants.REGISTING:
+				showProgressDialog("CShWen注册中");
 				break;
-			case Constants.LOGINED:
-				System.out.println("CShWen已登录");
+			case Constants.REGISTED:
+				dismissProgressDialog();
+				Toast.makeText(getApplicationContext(), "CShWen注册成功",
+						Toast.LENGTH_SHORT).show();
+				Intent intent = new Intent(RegisterActivity.this,
+						HomeActivity.class);
+				startActivity(intent);
 				break;
-			case Constants.LOGIN_FAILURE:
-				System.out.println("CShWen失败");
+			case Constants.REGIST_FAILURE:
+				dismissProgressDialog();
+				Bundle data = msg.getData();
+				if (data != null) {
+					String error = data.getString(Constants.REGIST_ERROR);
+					if (error.equals(XMPPError.Condition.conflict.toString())) {
+						Toast.makeText(getApplicationContext(), "该用户已存在，请直接登录",
+								Toast.LENGTH_SHORT).show();
+					} else {
+						Toast.makeText(getApplicationContext(), error,
+								Toast.LENGTH_SHORT).show();
+					}
+				}
 				break;
 			case Constants.CONNECTING:
-				System.out.println("CShWen连接中");
+				showProgressDialog("CShWen连接中");
 				break;
 			}
 		}
@@ -50,7 +71,8 @@ public class RegisterActivity extends Activity {
 
 		im = new ImManager(handler);
 		final FontAwesomeText register_rule = (FontAwesomeText) findViewById(R.id.register_rule);
-		register_rule.startFlashing(this, true, FontAwesomeText.AnimationSpeed.MEDIUM);
+		register_rule.startFlashing(this, true,
+				FontAwesomeText.AnimationSpeed.MEDIUM);
 	}
 
 	public void registerClick(View v) {
@@ -69,5 +91,23 @@ public class RegisterActivity extends Activity {
 			register_pwd.setError("请输入规范的密码");
 		else
 			im.registerUser(username, pwd);
+	}
+
+	public void showProgressDialog(String msg) {
+		if (progress == null) {
+			progress = new ProgressDialog(this);
+		}
+		if (progress.isShowing()) {
+			progress.dismiss();
+		}
+		progress.setMessage(msg);
+		progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+		progress.show();
+	}
+
+	public void dismissProgressDialog() {
+		if (progress != null && progress.isShowing()) {
+			progress.dismiss();
+		}
 	}
 }

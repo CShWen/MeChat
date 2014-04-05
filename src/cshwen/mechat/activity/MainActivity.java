@@ -7,14 +7,17 @@ import cshwen.mechat.utils.Constants;
 import cshwen.mechat.utils.Tool;
 import cshwen.mechat.utils.XmlUtil;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.Menu;
 import android.view.View;
+import android.widget.Toast;
 
 public class MainActivity extends Activity {
+	ProgressDialog progress;
 	ImManager im;
 	XmlUtil uxml;
 	Handler handler = new Handler() {
@@ -22,16 +25,29 @@ public class MainActivity extends Activity {
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
 			case Constants.LOGINING:
-				System.out.println("CShWen登录中");
+				showProgressDialog("CShWen登录中");
 				break;
 			case Constants.LOGINED:
-				System.out.println("CShWen已登录");
+				dismissProgressDialog();
+				Toast.makeText(getApplicationContext(), "CShWen登录成功",
+						Toast.LENGTH_SHORT).show();
+				Intent intent = new Intent(MainActivity.this,
+						HomeActivity.class);
+				startActivity(intent);
 				break;
 			case Constants.LOGIN_FAILURE:
-				System.out.println("CShWen失败");
+				dismissProgressDialog();
+				Bundle data = msg.getData();
+				if (data != null) {
+					String error = data.getString(Constants.LOGIN_ERROR);
+					Toast.makeText(getApplicationContext(), error,
+							Toast.LENGTH_SHORT).show();
+				} else
+					Toast.makeText(getApplicationContext(), "CShWen失败",
+							Toast.LENGTH_SHORT).show();
 				break;
 			case Constants.CONNECTING:
-				System.out.println("CShWen连接中");
+				showProgressDialog("CShWen连接中");
 				break;
 			}
 		}
@@ -52,6 +68,11 @@ public class MainActivity extends Activity {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
+	}
+
+	public void onDestroy() {
+		im.exit();
+		super.onDestroy();
 	}
 
 	public void loginClick(View v) {
@@ -75,4 +96,21 @@ public class MainActivity extends Activity {
 		startActivity(intent);
 	}
 
+	public void showProgressDialog(String msg) {
+		if (progress == null) {
+			progress = new ProgressDialog(this);
+		}
+		if (progress.isShowing()) {
+			progress.dismiss();
+		}
+		progress.setMessage(msg);
+		progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+		progress.show();
+	}
+
+	public void dismissProgressDialog() {
+		if (progress != null && progress.isShowing()) {
+			progress.dismiss();
+		}
+	}
 }
