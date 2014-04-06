@@ -3,10 +3,15 @@
  */
 package cshwen.mechat.im;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
 
 import org.jivesoftware.smack.ConnectionConfiguration;
 import org.jivesoftware.smack.PacketListener;
+import org.jivesoftware.smack.Roster;
+import org.jivesoftware.smack.RosterEntry;
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.filter.AndFilter;
@@ -251,7 +256,42 @@ public class ImManager {
 			e.printStackTrace();
 		}
 	}
-
+	
+	public void addFriend(String addJID, String nick) {
+		Roster roster = getConnection().getRoster();
+		try {
+//			roster.createEntry(addName, null, new String[] { "friends" });
+			roster.createEntry(addJID, nick, null);
+			System.out.println("[cshwen添加好友success]");
+		} catch (XMPPException e) {
+			System.out.println("[cshwen添加好友Error]");
+			e.printStackTrace();
+		}
+	}
+	
+	public void showFriends(){
+		Roster roster=getConnection().getRoster();
+		Collection<RosterEntry> it = roster.getEntries();
+		ArrayList<String> friends = new ArrayList<String>();
+		for(RosterEntry rosterEnter:it){
+			friends.add(rosterEnter.getUser());
+			// getUser为JID，getName为自定义昵称
+			System.out.println("[cshwen|it好友：]"+rosterEnter.getUser()+"{|}"+rosterEnter.getName());
+		}
+	
+		if (friends.size()==0){
+			friends.add("You have no friend");
+		}
+//		HashMap hm=new HashMap();  
+//        Collection<RosterEntry> m=roster.getEntries();  
+//        for(Iterator<RosterEntry> i=m.iterator();i.hasNext();){  
+//            RosterEntry re= i.next();  
+//            System.out.println("name:"+re.getName());//打印好友信息  
+//            System.out.println("user:"+re.getUser());  
+//              
+//        }  
+	}
+	
 	public static void configure(ProviderManager pm) {
 
 		// Private Data Storage

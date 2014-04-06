@@ -30,7 +30,9 @@ public class HomeActivity extends Activity {
 		setContentView(R.layout.activity_home);
 
 		im = new ImManager(handler);
-		im.searchUser("test");
+//		im.searchUser("test");
+//		im.addFriend("test@cshwen","sb"); // ҪJID,�ǳƿ�ѡ
+		im.showFriends();
 	}
 
 }
