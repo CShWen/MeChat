@@ -5,7 +5,6 @@ package cshwen.mechat.im;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Iterator;
 
 import org.jivesoftware.smack.ConnectionConfiguration;
@@ -52,7 +51,9 @@ import org.jivesoftware.smackx.provider.XHTMLExtensionProvider;
 import org.jivesoftware.smackx.search.UserSearch;
 import org.jivesoftware.smackx.search.UserSearchManager;
 
+import cshwen.mechat.adapter.FriendAdapter;
 import cshwen.mechat.utils.Constants;
+import cshwen.mechat.utils.FriendClass;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -216,7 +217,14 @@ public class ImManager {
 	 * 
 	 */
 	public void exit() {
-		connection.disconnect();
+		if(connection!=null){  
+            //移除連接監聽  
+            //connection.removeConnectionListener(connectionListener);  
+            if(connection.isConnected())  
+                connection.disconnect();  
+            connection = null;  
+        }
+		Log.i(TAG, "关闭连接");
 	}
 
 	public XMPPConnection getConnection(){
@@ -269,7 +277,19 @@ public class ImManager {
 		}
 	}
 	
-	public void showFriends(){
+	public void delFriend(String delJID) {
+		Roster roster = getConnection().getRoster();
+		try {
+			roster.removeEntry(roster.getEntry(delJID));
+			System.out.println("[cshwen删除好友success]");
+		} catch (XMPPException e) {
+			System.out.println("[cshwen删除好友Error]");
+			e.printStackTrace();
+		}  
+	}
+	
+	public ArrayList<FriendClass> showFriends(){
+		ArrayList<FriendClass> datas=new ArrayList<FriendClass>();
 		Roster roster=getConnection().getRoster();
 		Collection<RosterEntry> it = roster.getEntries();
 		ArrayList<String> friends = new ArrayList<String>();
@@ -277,11 +297,13 @@ public class ImManager {
 			friends.add(rosterEnter.getUser());
 			// getUser为JID，getName为自定义昵称
 			System.out.println("[cshwen|it好友：]"+rosterEnter.getUser()+"{|}"+rosterEnter.getName());
+			datas.add(new FriendClass(rosterEnter.getUser()));
 		}
 	
 		if (friends.size()==0){
 			friends.add("You have no friend");
 		}
+		return datas;
 //		HashMap hm=new HashMap();  
 //        Collection<RosterEntry> m=roster.getEntries();  
 //        for(Iterator<RosterEntry> i=m.iterator();i.hasNext();){  
@@ -290,6 +312,11 @@ public class ImManager {
 //            System.out.println("user:"+re.getUser());  
 //              
 //        }  
+	}
+	
+	public void isPresence(String un){
+		Roster roster=getConnection().getRoster();
+		System.out.println("[cshwen|un是否在线：]"+roster.getPresence(un));  
 	}
 	
 	public static void configure(ProviderManager pm) {

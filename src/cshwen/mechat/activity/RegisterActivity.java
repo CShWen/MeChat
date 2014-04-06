@@ -11,12 +11,14 @@ import com.beardedhen.androidbootstrap.FontAwesomeText;
 import cshwen.mechat.im.ImManager;
 import cshwen.mechat.utils.Constants;
 import cshwen.mechat.utils.Tool;
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
@@ -73,6 +75,21 @@ public class RegisterActivity extends Activity {
 		final FontAwesomeText register_rule = (FontAwesomeText) findViewById(R.id.register_rule);
 		register_rule.startFlashing(this, true,
 				FontAwesomeText.AnimationSpeed.MEDIUM);
+
+		final ActionBar actionBar = getActionBar();
+		actionBar.setDisplayHomeAsUpEnabled(true);
+	}
+
+	public boolean onOptionsItemSelected(MenuItem mi) {
+		if (mi.isCheckable()) {
+			mi.setChecked(true);
+		}
+		switch (mi.getItemId()) {
+		case android.R.id.home:
+			finish();
+			break;
+		}
+		return true;
 	}
 
 	public void registerClick(View v) {

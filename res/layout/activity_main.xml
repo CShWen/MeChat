@@ -61,12 +61,12 @@
         android:id="@+id/login_register"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
         android:layout_margin="5dp"
         android:onClick="registerClick"
         android:text="@string/login_register"
-        bootstrapbutton:bb_roundedCorners="true" >
+        fontawesometext:bb_roundedCorners="true" >
     </com.beardedhen.androidbootstrap.BootstrapButton>
 
 </RelativeLayout>
