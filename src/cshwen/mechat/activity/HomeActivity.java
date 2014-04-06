@@ -3,8 +3,11 @@
  */
 package cshwen.mechat.activity;
 
+import cshwen.mechat.im.ImManager;
 import android.app.Activity;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 
 /**
  * @author CShWen
@@ -12,6 +15,13 @@ import android.os.Bundle;
  */
 public class HomeActivity extends Activity {
 
+	ImManager im;
+	Handler handler = new Handler() {
+		@Override
+		public void handleMessage(Message msg) {
+			
+		}
+	};
 	/**
 	 * 
 	 */
@@ -19,6 +29,8 @@ public class HomeActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_home);
 
+		im = new ImManager(handler);
+		im.searchUser("test");
 	}
 
 }
