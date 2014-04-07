@@ -26,6 +26,7 @@
         </activity>
         <activity android:name="cshwen.mechat.activity.RegisterActivity" />
         <activity android:name="cshwen.mechat.activity.HomeActivity" />
+        <activity android:name="cshwen.mechat.activity.ChatActivity" />
     </application>
 
 </manifest>

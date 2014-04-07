@@ -16,4 +16,5 @@
     <string name="register_register">立即注册</string>
     <string name="register_rule">请注意：用户名长度为3–20个字符，密码长度为3–20个字符，均不为空。</string>
     
+    <string name="chat_send">发送</string>
 </resources>

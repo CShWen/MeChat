@@ -33,4 +33,7 @@ public class Constants {
 	
 	public static final String xmlKey="MeChat_CShWen";
 
+	public static final int MSG_SEND=1;
+	public static final int MSG_RECEIVER=2;
+
 }

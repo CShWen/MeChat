@@ -72,6 +72,7 @@ public class MainActivity extends Activity {
 
 	public void onDestroy() {
 		im.exit();
+		im = null;
 		super.onDestroy();
 	}
 
@@ -91,7 +92,6 @@ public class MainActivity extends Activity {
 	}
 
 	public void registerClick(View v) {
-		im.exit();
 		Intent intent = new Intent(this, RegisterActivity.class);
 		startActivity(intent);
 	}
