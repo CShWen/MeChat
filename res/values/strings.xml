@@ -17,4 +17,8 @@
     <string name="register_rule">请注意：用户名长度为3–20个字符，密码长度为3–20个字符，均不为空。</string>
     
     <string name="chat_send">发送</string>
+    
+    <string name="menu_friend">显示好友</string>
+    <string name="menu_search">搜索/添加</string>
+    
 </resources>

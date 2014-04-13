@@ -12,7 +12,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.view.Menu;
 import android.view.View;
 import android.widget.Toast;
 
@@ -61,13 +60,6 @@ public class MainActivity extends Activity {
 		im = new ImManager(handler);
 		uxml = new XmlUtil(getApplicationContext());
 
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.main, menu);
-		return true;
 	}
 
 	public void onDestroy() {

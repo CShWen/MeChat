@@ -239,30 +239,39 @@ public class ImManager {
 		return connection;
 	}
 
-	public void searchUser(String searchName){
-		try{
+	public ArrayList<FriendClass> searchUser(String searchName) {
+		ArrayList<FriendClass> datas = new ArrayList<FriendClass>();
+		try {
 			UserSearchManager search = new UserSearchManager(getConnection());
-			Form searchForm = search.getSearchForm("search."+Constants.MC_SERVER);
+			Form searchForm = search.getSearchForm("search."
+					+ Constants.MC_SERVER);
 			Form answerForm = searchForm.createAnswerForm();
 			answerForm.setAnswer("Username", true);
 			answerForm.setAnswer("search", searchName);
-			ReportedData data = search.getSearchResults(answerForm,"search."+Constants.MC_SERVER);
-			
+			ReportedData data = search.getSearchResults(answerForm, "search."
+					+ Constants.MC_SERVER);
+
 			Iterator<Row> it = data.getRows();
-			Row row=null;
-			while(it.hasNext()){
-				String ansS="";
-				row=it.next();
-//				ansS+=row.getValues("Username").next().toString()+"\n";
-				
-				//Log.i("Username",row.getValues("Username").next().toString());
-				System.out.println("[csw测试的]:"+row.getValues("Username").next()+"|||"+row.getValues("Name").next()+"|||"+row.getValues("Email").next()+"|||"+row.getValues("JID").next());
+			Row row = null;
+			while (it.hasNext()) {
+				String ansS = "";
+				row = it.next();
+				System.out.println("[csw测试的]:"
+						+ row.getValues("Username").next() + "|||"
+						+ row.getValues("Name").next() + "|||"
+						+ row.getValues("Email").next() + "|||"
+						+ row.getValues("JID").next());
+				datas.add(new FriendClass((String) row.getValues("JID").next(),
+						(String) row.getValues("Username").next(), (String) row
+								.getValues("Name").next(), (String) row
+								.getValues("Email").next()));
 			}
-//			Toast.makeText(this,ansS, Toast.LENGTH_SHORT).show();
-		}catch(Exception e){
-			System.out.println("[csw异常]:"+e.getClass().toString());
+			// Toast.makeText(this,ansS, Toast.LENGTH_SHORT).show();
+		} catch (Exception e) {
+			System.out.println("[csw异常]:" + e.getClass().toString());
 			e.printStackTrace();
 		}
+		return datas;
 	}
 	
 	public void addFriend(String addJID, String nick) {
@@ -296,8 +305,7 @@ public class ImManager {
 		for(RosterEntry rosterEnter:it){
 			friends.add(rosterEnter.getUser());
 			// getUser为JID，getName为自定义昵称
-			System.out.println("[cshwen|it好友：]"+rosterEnter.getUser()+"{|}"+rosterEnter.getName());
-			datas.add(new FriendClass(rosterEnter.getUser()));
+			datas.add(new FriendClass(rosterEnter.getUser(),rosterEnter.getName(),rosterEnter.getName(),null));
 		}
 	
 		if (friends.size()==0){

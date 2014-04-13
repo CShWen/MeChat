@@ -259,14 +259,17 @@ containing a value of this type.
         public static final int edittext_background_rounded_warning=0x7f020016;
         public static final int edittext_background_success=0x7f020017;
         public static final int edittext_background_warning=0x7f020018;
-        public static final int ic_launcher=0x7f020019;
-        public static final int incoming=0x7f02001a;
-        public static final int outgoing=0x7f02001b;
-        public static final int thumbnail_circle=0x7f02001c;
-        public static final int thumbnail_circle_container=0x7f02001d;
-        public static final int thumbnail_circle_minimal=0x7f02001e;
+        public static final int ic_action_group=0x7f020019;
+        public static final int ic_launcher=0x7f02001a;
+        public static final int incoming=0x7f02001b;
+        public static final int outgoing=0x7f02001c;
+        public static final int thumbnail_circle=0x7f02001d;
+        public static final int thumbnail_circle_container=0x7f02001e;
+        public static final int thumbnail_circle_minimal=0x7f02001f;
     }
     public static final class id {
+        public static final int action_friend=0x7f090025;
+        public static final int action_search=0x7f090026;
         public static final int action_settings=0x7f090024;
         public static final int chat_messages=0x7f090003;
         public static final int chat_send=0x7f090002;
@@ -335,6 +338,8 @@ containing a value of this type.
         public static final int login_hint_username=0x7f060003;
         public static final int login_login=0x7f060005;
         public static final int login_register=0x7f060006;
+        public static final int menu_friend=0x7f06000d;
+        public static final int menu_search=0x7f06000e;
         public static final int register_hint_2pwd=0x7f060009;
         public static final int register_hint_pwd=0x7f060008;
         public static final int register_hint_username=0x7f060007;

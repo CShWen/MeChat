@@ -18,11 +18,13 @@ import cshwen.mechat.utils.Constants;
 import cshwen.mechat.utils.Msg;
 import cshwen.mechat.utils.Tool;
 import cshwen.mechat.utils.XmlUtil;
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -92,8 +94,24 @@ public class ChatActivity extends Activity {
 		cAdapter = new ChatAdapter(getApplicationContext(),
 				new ArrayList<Msg>());
 		chat_messages.setAdapter(cAdapter);
+		
+		final ActionBar actionBar = getActionBar();
+		actionBar.setDisplayHomeAsUpEnabled(true);
+		actionBar.setTitle(intent.getStringExtra("toUserName"));
 	}
 
+	public boolean onOptionsItemSelected(MenuItem mi) {
+		if (mi.isCheckable()) {
+			mi.setChecked(true);
+		}
+		switch (mi.getItemId()) {
+		case android.R.id.home:
+			finish();
+			break;
+		}
+		return true;
+	}
+	
 	public void sendClick(View v) {
 		String msg = chat_text.getText().toString().trim();
 		if (msg != null && !msg.equals("")) {
