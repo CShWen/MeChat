@@ -121,10 +121,6 @@ public class HomeActivity extends Activity {
 		// im.delFriend("test@cshwen");
 		// im.isPresence("test@cshwen");
 		uxml = new XmlUtil(getApplicationContext());
-//		Intent service = new Intent(HomeActivity.this, BackService.class);
-//		service.putExtra("user", uxml.getUserName());
-//		service.putExtra("ChWenMeChatMsg", new Messenger(handler));
-//		bindService(service, conn, Context.BIND_AUTO_CREATE);
 
 		notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 	}
@@ -211,8 +207,7 @@ public class HomeActivity extends Activity {
 								new DialogInterface.OnClickListener() {
 									public void onClick(DialogInterface dialog,
 											int which) {
-//										im.addFriend("test@cshwen","自定义昵称");
-										im.addFriend(fc.getJID(), fc.getJID());
+										im.addFriend(fc.getJID(), fc.getUsername());
 									}
 								}).setNegativeButton("取消", null).show();
 			}

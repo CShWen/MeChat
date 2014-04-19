@@ -20,11 +20,11 @@ public class FriendClass {
 		this.JID = JID;
 		this.username = username;
 		if (username == null || username.equals(""))
-			this.username = JID;
+			this.username = JID.substring(0, JID.indexOf("@"));
 		else
 			this.username = username;
 		if (name == null || name.equals(""))
-			this.name = JID;
+			this.name = JID.substring(0, JID.indexOf("@"));
 		else
 			this.name = name;
 		this.email = email;

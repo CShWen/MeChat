@@ -223,16 +223,10 @@ public class ImManager {
 		}.start();
 	}
 
-	/**
-	 * 
-	 */
 	public void exit() {
-//		if (connection != null) {
-			// 移除連接監聽
-			if (connection.isConnected())
-				connection.disconnect();
-			connection = new XMPPConnection(connConfig);
-//		}
+		if (connection.isConnected())
+			connection.disconnect();
+		connection = new XMPPConnection(connConfig);
 		Log.i(TAG, "关闭连接");
 	}
 
@@ -291,39 +285,10 @@ public class ImManager {
 		}
 	}
 
-//	public void testMsg() {
-//		Collection<RosterEntry> unfiledEntries = roster.getUnfiledEntries();
-//		System.out.println("cshwen测试的数量："
-//				+ roster.getUnfiledEntryCount());
-//		Iterator<RosterEntry> iter = unfiledEntries.iterator();
-//		while (iter.hasNext()) {
-//			RosterEntry entry = iter.next();
-//			System.out.println(entry.getGroups() + entry.getName()
-//					+ entry.getStatus() + entry.getType() + entry);
-//		}
-//	}
-	
-//	public void agreeFriend(String uJID){
-//		Presence presenced = new Presence(Presence.Type.subscribed);
-//		presenced.setTo(uJID);
-//		getConnection().sendPacket(presenced);
-//		Presence presence = new Presence(Presence.Type.subscribe);
-//		presence.setTo(uJID);
-//		getConnection().sendPacket(presence);
-//	}
-	
-//	public void refuseFriend(String uJID){
-//		Presence presence = new Presence(Presence.Type.unsubscribe);
-//		presence.setTo(uJID);
-//		getConnection().sendPacket(presence);
-//	}
-	
 	public void delFriend(String delJID) {
 		try {
 			roster.removeEntry(roster.getEntry(delJID));
-//			System.out.println("[cshwen删除好友success]");
 		} catch (XMPPException e) {
-//			System.out.println("[cshwen删除好友Error]");
 			e.printStackTrace();
 		}
 	}
@@ -343,23 +308,8 @@ public class ImManager {
 			friends.add("You have no friend");
 		}
 		return datas;
-		// HashMap hm=new HashMap();
-		// Collection<RosterEntry> m=roster.getEntries();
-		// for(Iterator<RosterEntry> i=m.iterator();i.hasNext();){
-		// RosterEntry re= i.next();
-		// System.out.println("name:"+re.getName());//打印好友信息
-		// System.out.println("user:"+re.getUser());
-		// }
 	}
 
-//	public boolean isExistUser(String uJID){
-//		for (FriendClass fc : datas) {
-//			if(fc.getJID().equals(uJID))
-//				return true;
-//		}
-//		return false;
-//	}
-	
 	public void contactsListen(){
 		roster.addRosterListener(new RosterListener() {
 			public void presenceChanged(Presence presence) {
