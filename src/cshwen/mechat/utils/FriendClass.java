@@ -19,7 +19,14 @@ public class FriendClass {
 	public FriendClass(String JID, String username, String name, String email) {
 		this.JID = JID;
 		this.username = username;
-		this.name = name;
+		if (username == null || username.equals(""))
+			this.username = JID;
+		else
+			this.username = username;
+		if (name == null || name.equals(""))
+			this.name = JID;
+		else
+			this.name = name;
 		this.email = email;
 	}
 

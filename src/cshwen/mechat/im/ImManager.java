@@ -11,6 +11,7 @@ import org.jivesoftware.smack.ConnectionConfiguration;
 import org.jivesoftware.smack.PacketListener;
 import org.jivesoftware.smack.Roster;
 import org.jivesoftware.smack.RosterEntry;
+import org.jivesoftware.smack.RosterListener;
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.filter.AndFilter;
@@ -19,6 +20,7 @@ import org.jivesoftware.smack.filter.PacketIDFilter;
 import org.jivesoftware.smack.filter.PacketTypeFilter;
 import org.jivesoftware.smack.packet.IQ;
 import org.jivesoftware.smack.packet.Packet;
+import org.jivesoftware.smack.packet.Presence;
 import org.jivesoftware.smack.packet.Registration;
 import org.jivesoftware.smack.packet.XMPPError;
 import org.jivesoftware.smack.provider.PrivacyProvider;
@@ -51,7 +53,6 @@ import org.jivesoftware.smackx.provider.XHTMLExtensionProvider;
 import org.jivesoftware.smackx.search.UserSearch;
 import org.jivesoftware.smackx.search.UserSearchManager;
 
-import cshwen.mechat.adapter.FriendAdapter;
 import cshwen.mechat.utils.Constants;
 import cshwen.mechat.utils.FriendClass;
 import android.os.Bundle;
@@ -64,17 +65,24 @@ import android.util.Log;
  * 
  */
 public class ImManager {
+	private static ImManager im = new ImManager();
 	private static String TAG = ImManager.class.getSimpleName();
-	private Handler mHandler;
+	private Handler handler;
 
 	private static XMPPConnection connection;
 	private static ConnectionConfiguration connConfig;
-
+	private static Roster roster;
 	/**
 	 * 
 	 */
-	public ImManager(Handler handler) {
-		this.mHandler = handler;
+	public void setHandler(Handler handler) {
+		this.handler = handler;
+	}
+
+	public static ImManager getInstance() {
+		if (im == null)
+			im = new ImManager();
+		return im;
 	}
 
 	static {
@@ -87,6 +95,8 @@ public class ImManager {
 		configure(pm);
 		// connConfig.setTruststorePath("/system/etc/security/cacerts.bks");
 		// connConfig.setTruststoreType("bks");
+		roster=connection.getRoster();
+		roster.setSubscriptionMode(Roster.SubscriptionMode.accept_all);
 	}
 
 	public void loginUser(final String username, final String password) {
@@ -96,7 +106,7 @@ public class ImManager {
 				/* 若连接未建立，则先建立连接 */
 				if (!connection.isConnected()) {
 					try {
-						mHandler.sendEmptyMessage(Constants.CONNECTING);
+						handler.sendEmptyMessage(Constants.CONNECTING);
 						connection.connect();
 					} catch (XMPPException e) {
 						Log.e(TAG, e.toString());
@@ -106,7 +116,7 @@ public class ImManager {
 
 				/* 如果当前是未登录状态，则进行登录认证，若 已经登录，则直接进行操作 */
 				if (!connection.isAuthenticated()) {
-					mHandler.sendEmptyMessage(Constants.LOGINING);
+					handler.sendEmptyMessage(Constants.LOGINING);
 					PacketFilter packetFilter = new PacketTypeFilter(IQ.class);
 					PacketListener packetListener = new PacketListener() {
 						@Override
@@ -127,11 +137,11 @@ public class ImManager {
 									Message msg = new Message();
 									msg.setData(bundle);
 									msg.what = Constants.LOGIN_FAILURE;
-									mHandler.sendMessage(msg);
+									handler.sendMessage(msg);
 								} else if (response.getType() == IQ.Type.RESULT) {
 									/* 登录成功，跳转到消息发送页面 */
 									Log.e(TAG, "登录成功，跳转到消息发送页面");
-									mHandler.sendEmptyMessage(Constants.LOGINED);
+									handler.sendEmptyMessage(Constants.LOGINED);
 								}
 							}
 						}
@@ -148,12 +158,12 @@ public class ImManager {
 							Message msg = new Message();
 							msg.setData(bundle);
 							msg.what = Constants.LOGIN_FAILURE;
-							mHandler.sendMessage(msg);
+							handler.sendMessage(msg);
 						}
 					}
 					connection.addPacketListener(packetListener, packetFilter);
 				} else {
-					mHandler.sendEmptyMessage(Constants.LOGINED);
+					handler.sendEmptyMessage(Constants.LOGINED);
 					Log.e(TAG, "已经处于登录状态，跳转到消息发送页面");
 				}
 			}
@@ -167,14 +177,14 @@ public class ImManager {
 				/* 若连接未建立，则先建立连接 */
 				if (!connection.isConnected()) {
 					try {
-						mHandler.sendEmptyMessage(Constants.CONNECTING);
+						handler.sendEmptyMessage(Constants.CONNECTING);
 						connection.connect();
 					} catch (XMPPException e) {
 						Log.e(TAG, e.toString());
 						e.printStackTrace();
 					}
 				}
-				mHandler.sendEmptyMessage(Constants.REGISTING);
+				handler.sendEmptyMessage(Constants.REGISTING);
 				Registration registration = new Registration();
 				PacketFilter packetFilter = new AndFilter(new PacketIDFilter(
 						registration.getPacketID()), new PacketTypeFilter(
@@ -197,9 +207,9 @@ public class ImManager {
 								Message msg = new Message();
 								msg.setData(bundle);
 								msg.what = Constants.REGIST_FAILURE;
-								mHandler.sendMessage(msg);
+								handler.sendMessage(msg);
 							} else if (response.getType() == IQ.Type.RESULT) {
-								mHandler.sendEmptyMessage(Constants.REGISTED);
+								handler.sendEmptyMessage(Constants.REGISTED);
 							}
 						}
 					}
@@ -217,18 +227,17 @@ public class ImManager {
 	 * 
 	 */
 	public void exit() {
-		if(connection!=null){  
-            //移除連接監聽  
-            //connection.removeConnectionListener(connectionListener);  
-            if(connection.isConnected())  
-                connection.disconnect();  
-            connection = null;  
-        }
+//		if (connection != null) {
+			// 移除連接監聽
+			if (connection.isConnected())
+				connection.disconnect();
+			connection = new XMPPConnection(connConfig);
+//		}
 		Log.i(TAG, "关闭连接");
 	}
 
-	public XMPPConnection getConnection(){
-		if(!connection.isConnected()){
+	public XMPPConnection getConnection() {
+		if (!connection.isConnected()) {
 			try {
 				connection.connect();
 			} catch (XMPPException e) {
@@ -266,67 +275,144 @@ public class ImManager {
 								.getValues("Name").next(), (String) row
 								.getValues("Email").next()));
 			}
-			// Toast.makeText(this,ansS, Toast.LENGTH_SHORT).show();
 		} catch (Exception e) {
 			System.out.println("[csw异常]:" + e.getClass().toString());
 			e.printStackTrace();
 		}
 		return datas;
 	}
-	
+
 	public void addFriend(String addJID, String nick) {
-		Roster roster = getConnection().getRoster();
 		try {
-//			roster.createEntry(addName, null, new String[] { "friends" });
+			// roster.createEntry(addName, null, new String[] { "friends" });
 			roster.createEntry(addJID, nick, null);
-			System.out.println("[cshwen添加好友success]");
 		} catch (XMPPException e) {
-			System.out.println("[cshwen添加好友Error]");
 			e.printStackTrace();
 		}
 	}
+
+//	public void testMsg() {
+//		Collection<RosterEntry> unfiledEntries = roster.getUnfiledEntries();
+//		System.out.println("cshwen测试的数量："
+//				+ roster.getUnfiledEntryCount());
+//		Iterator<RosterEntry> iter = unfiledEntries.iterator();
+//		while (iter.hasNext()) {
+//			RosterEntry entry = iter.next();
+//			System.out.println(entry.getGroups() + entry.getName()
+//					+ entry.getStatus() + entry.getType() + entry);
+//		}
+//	}
+	
+//	public void agreeFriend(String uJID){
+//		Presence presenced = new Presence(Presence.Type.subscribed);
+//		presenced.setTo(uJID);
+//		getConnection().sendPacket(presenced);
+//		Presence presence = new Presence(Presence.Type.subscribe);
+//		presence.setTo(uJID);
+//		getConnection().sendPacket(presence);
+//	}
+	
+//	public void refuseFriend(String uJID){
+//		Presence presence = new Presence(Presence.Type.unsubscribe);
+//		presence.setTo(uJID);
+//		getConnection().sendPacket(presence);
+//	}
 	
 	public void delFriend(String delJID) {
-		Roster roster = getConnection().getRoster();
 		try {
 			roster.removeEntry(roster.getEntry(delJID));
-			System.out.println("[cshwen删除好友success]");
+//			System.out.println("[cshwen删除好友success]");
 		} catch (XMPPException e) {
-			System.out.println("[cshwen删除好友Error]");
+//			System.out.println("[cshwen删除好友Error]");
 			e.printStackTrace();
-		}  
+		}
 	}
-	
-	public ArrayList<FriendClass> showFriends(){
-		ArrayList<FriendClass> datas=new ArrayList<FriendClass>();
-		Roster roster=getConnection().getRoster();
+
+	public ArrayList<FriendClass> showFriends() {
+		ArrayList<FriendClass> datas = new ArrayList<FriendClass>();
 		Collection<RosterEntry> it = roster.getEntries();
 		ArrayList<String> friends = new ArrayList<String>();
-		for(RosterEntry rosterEnter:it){
+		for (RosterEntry rosterEnter : it) {
 			friends.add(rosterEnter.getUser());
 			// getUser为JID，getName为自定义昵称
-			datas.add(new FriendClass(rosterEnter.getUser(),rosterEnter.getName(),rosterEnter.getName(),null));
+			datas.add(new FriendClass(rosterEnter.getUser(), rosterEnter
+					.getName(), rosterEnter.getName(), null));
 		}
-	
-		if (friends.size()==0){
+
+		if (friends.size() == 0) {
 			friends.add("You have no friend");
 		}
 		return datas;
-//		HashMap hm=new HashMap();  
-//        Collection<RosterEntry> m=roster.getEntries();  
-//        for(Iterator<RosterEntry> i=m.iterator();i.hasNext();){  
-//            RosterEntry re= i.next();  
-//            System.out.println("name:"+re.getName());//打印好友信息  
-//            System.out.println("user:"+re.getUser());  
-//              
-//        }  
+		// HashMap hm=new HashMap();
+		// Collection<RosterEntry> m=roster.getEntries();
+		// for(Iterator<RosterEntry> i=m.iterator();i.hasNext();){
+		// RosterEntry re= i.next();
+		// System.out.println("name:"+re.getName());//打印好友信息
+		// System.out.println("user:"+re.getUser());
+		// }
+	}
+
+//	public boolean isExistUser(String uJID){
+//		for (FriendClass fc : datas) {
+//			if(fc.getJID().equals(uJID))
+//				return true;
+//		}
+//		return false;
+//	}
+	
+	public void contactsListen(){
+		roster.addRosterListener(new RosterListener() {
+			public void presenceChanged(Presence presence) {
+				String friendMood = presence.getStatus();
+				System.out.println("监听好友状态改变消息是：" + presence.getStatus());
+			}
+
+			public void entriesUpdated(Collection<String> invites) {
+				String uJID = null;
+				for (Iterator iter = invites.iterator(); iter.hasNext();) {
+					uJID= (String) iter.next();
+				}
+				System.out.println("CShWen同意添加的好友是：" + uJID);
+				Message msg = Message.obtain();
+				msg.obj = uJID;
+				msg.what = Constants.FRIEND_AGREE;
+				handler.sendMessage(msg);
+			}
+
+			public void entriesDeleted(Collection<String> invites) {
+				System.out.println("CShWen监听到删除好友的消息是：" + invites);
+				String uJID = null;
+				for (Iterator iter = invites.iterator(); iter.hasNext();) {
+					uJID = (String) iter.next();
+				}
+				Message msg = Message.obtain();
+				msg.obj = uJID;
+				msg.what = Constants.FRIEND_STOP;
+				handler.sendMessage(msg);
+			}
+
+			public void entriesAdded(Collection<String> invites) {
+				String uJID = null;
+				for (Iterator iter = invites.iterator(); iter.hasNext();) {
+					uJID = (String) iter.next();
+				}
+				System.out.println("CShWen申请添加好友的是：" + uJID);
+				Message msg = Message.obtain();
+				msg.obj = uJID;
+				msg.what = Constants.FRIEND_APPLY;
+				handler.sendMessage(msg);
+			}
+		});
 	}
 	
-	public void isPresence(String un){
-		Roster roster=getConnection().getRoster();
-		System.out.println("[cshwen|un是否在线：]"+roster.getPresence(un));  
+	public void isPresence(String un) {
+		System.out.println("[cshwen|un是否在线：]" + roster.getPresence(un));
 	}
 	
+	public void setMsgFilter(PacketListener listener,PacketFilter filter){ // 添加接受消息监听器
+		getConnection().addPacketListener(listener, filter);
+	}
+
 	public static void configure(ProviderManager pm) {
 
 		// Private Data Storage
@@ -478,4 +564,5 @@ public class ImManager {
 				"http://jabber.org/protocol/commands",
 				new AdHocCommandDataProvider.SessionExpiredError());
 	}
+
 }

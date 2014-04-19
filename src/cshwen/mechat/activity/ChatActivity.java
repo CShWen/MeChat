@@ -70,7 +70,8 @@ public class ChatActivity extends Activity {
 
 		Intent intent = getIntent();
 		toUserJID = intent.getStringExtra("toUserJID");
-		im = new ImManager(null);
+		im=ImManager.getInstance();
+		im.setHandler(mHandler);
 		chatManager = im.getConnection().getChatManager();
 		oneChat = chatManager.createChat(toUserJID, new MessageListener() {
 			public void processMessage(Chat ct, Message msg) {

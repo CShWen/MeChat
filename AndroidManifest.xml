@@ -28,6 +28,7 @@
         <activity android:name="cshwen.mechat.activity.RegisterActivity" />
         <activity android:name="cshwen.mechat.activity.HomeActivity" />
         <activity android:name="cshwen.mechat.activity.ChatActivity" />
+        <service android:name="cshwen.mechat.service.BackService" />
     </application>
 
 </manifest>

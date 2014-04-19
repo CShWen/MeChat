@@ -57,7 +57,8 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		im = new ImManager(handler);
+		im=ImManager.getInstance();
+		im.setHandler(handler);
 		uxml = new XmlUtil(getApplicationContext());
 
 	}

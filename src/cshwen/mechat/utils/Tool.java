@@ -32,4 +32,11 @@ public class Tool {
 		SimpleDateFormat df = new SimpleDateFormat("yy-MM-dd HH:mm");
 		return df.format(new Date());
 	}
+	
+	public static int getHashNum(String key) {
+        int hash, i;
+        for (hash = key.length(), i = 0; i < key.length(); ++i)
+            hash = (hash << 4) ^ (hash >> 28) ^ key.charAt(i);
+        return (hash % 317);
+    }
 }

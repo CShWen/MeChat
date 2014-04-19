@@ -71,7 +71,8 @@ public class RegisterActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_register);
 
-		im = new ImManager(handler);
+		im=ImManager.getInstance();
+		im.setHandler(handler);
 		final FontAwesomeText register_rule = (FontAwesomeText) findViewById(R.id.register_rule);
 		register_rule.startFlashing(this, true,
 				FontAwesomeText.AnimationSpeed.MEDIUM);
