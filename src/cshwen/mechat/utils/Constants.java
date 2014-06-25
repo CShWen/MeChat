@@ -26,9 +26,9 @@ public class Constants {
 	public static final String REGIST_ERROR = "REGIST_ERROR";
 	public static final String LOGIN_ERROR = "LOGIN_ERROR";
 
-	public static final String MC_IP = "192.168.56.1";
+	public static final String MC_IP = "192.168.191.1";
 	public static final int MC_PORT = 5222;
-	public static final String MC_SERVER = "CShWen";
+	public static final String MC_SERVER = "cshwen.cn";
 
 	public static final String xmlKey = "MeChat_CShWen";
 

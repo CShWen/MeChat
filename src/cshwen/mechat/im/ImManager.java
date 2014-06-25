@@ -303,7 +303,6 @@ public class ImManager {
 			datas.add(new FriendClass(rosterEnter.getUser(), rosterEnter
 					.getName(), rosterEnter.getName(), null));
 		}
-
 		if (friends.size() == 0) {
 			friends.add("You have no friend");
 		}
